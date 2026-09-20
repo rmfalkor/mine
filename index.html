@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>FORGE — Calisthenics & Martial Arts</title>
+
+  <meta name="description"
+        content="Train calisthenics, martial arts, mobility and conditioning. Learn, level up and compete.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #05070b;
+      --panel: rgba(14, 18, 27, .72);
+      --panel2: rgba(20, 26, 38, .82);
+      --border: rgba(255,255,255,.09);
+      --text: #f5f7fb;
+      --muted: #8e98aa;
+      --cyan: #5ee7ff;
+      --blue: #6578ff;
+      --purple: #a66cff;
+      --green: #52e09a;
+      --red: #ff647c;
+      --gold: #ffd66b;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, sans-serif;
+      overflow-x: hidden;
+    }
+
+    #three-bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -5;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: .035;
+      background-image:
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+    }
+
+    .glow {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: rgba(91, 109, 255, .08);
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    .glow.one {
+      top: -200px;
+      left: -200px;
+    }
+
+    .glow.two {
+      bottom: -250px;
+      right: -200px;
+      background: rgba(94,231,255,.06);
+    }
+
+    /* NAV */
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5%;
+      background: rgba(5,7,11,.65);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: Orbitron, sans-serif;
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: 3px;
+    }
+
+    .logo span {
+      color: var(--cyan);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 25px;
+    }
+
+    .nav-links button {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .nav-links button:hover,
+    .nav-links button.active {
+      color: white;
+    }
+
+    .user-mini {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg,var(--blue),var(--purple));
+      font-weight: 800;
+      box-shadow: 0 0 25px rgba(101,120,255,.25);
+    }
+
+    .user-mini strong {
+      font-size: 13px;
+    }
+
+    .user-mini small {
+      display: block;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    /* GENERAL */
+
+    main {
+      width: min(1450px, 92%);
+      margin: auto;
+      padding-top: 110px;
+    }
+
+    section {
+      margin-bottom: 90px;
+    }
+
+    .eyebrow {
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: Orbitron, sans-serif;
+      font-size: clamp(38px, 6vw, 78px);
+      line-height: .98;
+      max-width: 900px;
+    }
+
+    h2 {
+      font-family: Orbitron, sans-serif;
+      font-size: clamp(25px, 4vw, 40px);
+      margin-bottom: 10px;
+    }
+
+    .sub {
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 650px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 13px 20px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: .2s;
+      color: #061016;
+      background: linear-gradient(135deg,var(--cyan),#86f1ff);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 35px rgba(94,231,255,.2);
+    }
+
+    .btn.secondary {
+      background: rgba(255,255,255,.06);
+      color: white;
+      border: 1px solid var(--border);
+    }
+
+    /* HERO */
+
+    .hero {
+      min-height: 650px;
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 50px;
+      align-items: center;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(90deg,var(--cyan),var(--purple));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero-description {
+      font-size: 17px;
+      margin: 25px 0;
+      color: var(--muted);
+      max-width: 650px;
+      line-height: 1.8;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .hero-card {
+      min-height: 420px;
+      border: 1px solid var(--border);
+      background: linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.025));
+      backdrop-filter: blur(18px);
+      border-radius: 28px;
+      padding: 25px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 30px 100px rgba(0,0,0,.3);
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      background: rgba(94,231,255,.13);
+      filter: blur(70px);
+      top: -100px;
+      right: -70px;
+    }
+
+    .rank-big {
+      font-family: Orbitron;
+      font-size: 75px;
+      margin: 35px 0 10px;
+      background: linear-gradient(135deg,var(--cyan),var(--purple));
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .xp-bar {
+      width: 100%;
+      height: 8px;
+      background: rgba(255,255,255,.07);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .xp-fill {
+      height: 100%;
+      width: 64%;
+      background: linear-gradient(90deg,var(--cyan),var(--purple));
+      border-radius: inherit;
+      transition: width .4s;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .stat {
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      padding: 15px;
+      border-radius: 14px;
+    }
+
+    .stat strong {
+      font-size: 20px;
+      display: block;
+    }
+
+    .stat small {
+      color: var(--muted);
+    }
+
+    /* SECTION HEAD */
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .search {
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: white;
+      padding: 13px 15px;
+      outline: none;
+      min-width: 230px;
+    }
+
+    /* COURSES */
+
+    .courses {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 18px;
+    }
+
+    .course {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      border-radius: 20px;
+      padding: 20px;
+      transition: .25s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .course:hover {
+      transform: translateY(-5px);
+      border-color: rgba(94,231,255,.3);
+    }
+
+    .course-icon {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: rgba(255,255,255,.07);
+      font-size: 25px;
+      margin-bottom: 18px;
+    }
+
+    .course h3 {
+      margin-bottom: 8px;
+    }
+
+    .course p {
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+      min-height: 63px;
+    }
+
+    .tags {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin: 15px 0;
+    }
+
+    .tag {
+      font-size: 10px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.06);
+      color: #b9c2d1;
+    }
+
+    /* DASHBOARD */
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 18px;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 7px;
+      font-size: 13px;
+    }
+
+    .progress {
+      height: 7px;
+      background: rgba(255,255,255,.06);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .progress div {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg,var(--cyan),var(--purple));
+    }
+
+    /* LEADERBOARD */
+
+    .leaderboard {
+      display: grid;
+      gap: 9px;
+    }
+
+    .leader {
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid transparent;
+    }
+
+    .leader.me {
+      border-color: rgba(94,231,255,.3);
+      background: rgba(94,231,255,.06);
+    }
+
+    .leader-rank {
+      font-family: Orbitron;
+      color: var(--muted);
+    }
+
+    .leader-name {
+      font-weight: 700;
+    }
+
+    .leader-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .leader-xp {
+      font-weight: 800;
+      color: var(--cyan);
+      font-size: 13px;
+    }
+
+    /* CHALLENGE */
+
+    .challenge {
+      min-height: 220px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 30px;
+      background:
+        linear-gradient(120deg,rgba(101,120,255,.16),rgba(166,108,255,.08)),
+        var(--panel);
+      border: 1px solid rgba(101,120,255,.2);
+      border-radius: 25px;
+      padding: 35px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .challenge::after {
+      content: "FORGE";
+      position: absolute;
+      right: -30px;
+      bottom: -30px;
+      font-family: Orbitron;
+      font-size: 120px;
+      opacity: .025;
+    }
+
+    .challenge-number {
+      font-family: Orbitron;
+      font-size: 55px;
+      color: var(--cyan);
+    }
+
+    /* MODAL */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(12px);
+      display: none;
+      place-items: center;
+      z-index: 200;
+      padding: 20px;
+    }
+
+    .modal.show {
+      display: grid;
+    }
+
+    .modal-box {
+      width: min(700px,100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: #0d1119;
+      border: 1px solid var(--border);
+      border-radius: 25px;
+      padding: 28px;
+      box-shadow: 0 30px 100px rgba(0,0,0,.55);
+    }
+
+    .modal-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 25px;
+    }
+
+    .close {
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--border);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .lesson {
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      margin: 10px 0;
+      background: rgba(255,255,255,.03);
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .lesson:hover {
+      background: rgba(255,255,255,.06);
+    }
+
+    .lesson small {
+      color: var(--muted);
+    }
+
+    /* PROFILE */
+
+    .profile-box {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 28px;
+      display: grid;
+      place-items: center;
+      font-size: 35px;
+      font-weight: 900;
+      background: linear-gradient(135deg,var(--cyan),var(--purple));
+      color: #071018;
+    }
+
+    .profile-name {
+      font-family: Orbitron;
+      font-size: 30px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 35px 5%;
+      color: var(--muted);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    @media(max-width:950px) {
+      .hero,
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .courses {
+        grid-template-columns: repeat(2,1fr);
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media(max-width:600px) {
+      main {
+        width: 94%;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 40px;
+      }
+
+      .courses {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        align-items: start;
+        flex-direction: column;
+      }
+
+      .search {
+        width: 100%;
+      }
+
+      .challenge {
+        flex-direction: column;
+        align-items: start;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .user-mini > div:last-child {
+        display: none;
+      }
+
+      nav {
+        padding: 0 3%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="three-bg"></canvas>
+
+  <div class="noise"></div>
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+
+  <nav>
+    <div class="logo">FORGE<span>.</span></div>
+
+    <div class="nav-links">
+      <button onclick="scrollToSection('home')">Home</button>
+      <button onclick="scrollToSection('courses')">Courses</button>
+      <button onclick="scrollToSection('progress')">Progress</button>
+      <button onclick="scrollToSection('leaderboard')">Leaderboard</button>
+      <button onclick="scrollToSection('profile')">Profile</button>
+    </div>
+
+    <div class="user-mini" onclick="openProfile()">
+      <div class="avatar" id="navAvatar">R</div>
+      <div>
+        <strong id="navName">Riwaj</strong>
+        <small id="navLevel">Level 7</small>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- HERO -->
+
+    <section class="hero" id="home">
+
+      <div>
+        <div class="eyebrow">TRAIN • LEARN • FORGE</div>
+
+        <h1>
+          Build your body.<br>
+          <span>Master your movement.</span>
+        </h1>
+
+        <p class="hero-description">
+          A modern training platform for calisthenics, martial arts,
+          mobility and conditioning. Follow structured lessons,
+          earn XP, complete challenges and climb the leaderboard.
+        </p>
+
+        <div class="hero-buttons">
+          <button class="btn" onclick="scrollToSection('courses')">
+            Explore Training
+          </button>
+
+          <button class="btn secondary" onclick="dailyChallenge()">
+            Daily Challenge
+          </button>
+        </div>
+      </div>
+
+      <div class="hero-card">
+
+        <div class="eyebrow">YOUR CURRENT RANK</div>
+
+        <div class="rank-big" id="heroLevel">LVL 07</div>
+
+        <strong id="heroRank">RISING WARRIOR</strong>
+
+        <div class="xp-bar">
+          <div class="xp-fill" id="xpFill"></div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;color:#8e98aa;font-size:12px;">
+          <span id="xpText">1,280 XP</span>
+          <span>2,000 XP</span>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <strong id="streakStat">12</strong>
+            <small>Day Streak</small>
+          </div>
+
+          <div class="stat">
+            <strong id="lessonsStat">24</strong>
+            <small>Lessons</small>
+          </div>
+
+          <div class="stat">
+            <strong id="pointsStat">1,280</strong>
+            <small>XP</small>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- COURSES -->
+
+    <section id="courses">
+
+      <div class="section-head">
+
+        <div>
+          <div class="eyebrow">ACADEMY</div>
+          <h2>Training Paths</h2>
+          <p class="sub">
+            Choose your discipline and start building your skill tree.
+          </p>
+        </div>
+
+        <input
+          class="search"
+          id="courseSearch"
+          placeholder="Search training..."
+          oninput="filterCourses()"
+        >
+
+      </div>
+
+      <div class="courses" id="courseGrid"></div>
+
+    </section>
+
+
+    <!-- PROGRESS -->
+
+    <section id="progress">
+
+      <div class="eyebrow">YOUR JOURNEY</div>
+      <h2>Training Progress</h2>
+
+      <div class="dashboard">
+
+        <div class="panel">
+
+          <div class="progress-row">
+            <strong>Calisthenics Fundamentals</strong>
+            <span>72%</span>
+          </div>
+
+          <div class="progress">
+            <div style="width:72%"></div>
+          </div>
+
+
+          <div class="progress-row">
+            <strong>Boxing Fundamentals</strong>
+            <span>44%</span>
+          </div>
+
+          <div class="progress">
+            <div style="width:44%"></div>
+          </div>
+
+
+          <div class="progress-row">
+            <strong>Kickboxing</strong>
+            <span>31%</span>
+          </div>
+
+          <div class="progress">
+            <div style="width:31%"></div>
+          </div>
+
+
+          <div class="progress-row">
+            <strong>Mobility & Flexibility</strong>
+            <span>83%</span>
+          </div>
+
+          <div class="progress">
+            <div style="width:83%"></div>
+          </div>
+
+        </div>
+
+        <div class="panel">
+
+          <div class="eyebrow">NEXT UNLOCK</div>
+
+          <h3 style="font-size:24px;margin:10px 0;">
+            Advanced Handstand
+          </h3>
+
+          <p class="sub">
+            Complete 3 more fundamentals lessons to unlock
+            the next skill.
+          </p>
+
+          <button
+            class="btn"
+            style="margin-top:20px;"
+            onclick="addXP(100)"
+          >
+            Complete Practice +100 XP
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- DAILY CHALLENGE -->
+
+    <section>
+
+      <div class="challenge">
+
+        <div>
+          <div class="eyebrow">DAILY CHALLENGE</div>
+
+          <h2>THE FOUNDATION</h2>
+
+          <p class="sub">
+            Complete 3 training sessions today and earn
+            bonus XP.
+          </p>
+
+          <button
+            class="btn"
+            style="margin-top:20px;"
+            onclick="completeChallenge()"
+          >
+            Complete Challenge
+          </button>
+        </div>
+
+        <div class="challenge-number">
+          +250 XP
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- LEADERBOARD -->
+
+    <section id="leaderboard">
+
+      <div class="section-head">
+
+        <div>
+          <div class="eyebrow">COMPETE</div>
+          <h2>Global Leaderboard</h2>
+          <p class="sub">
+            Train consistently and climb the ranks.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="panel">
+        <div class="leaderboard" id="leaderboardList"></div>
+      </div>
+
+    </section>
+
+
+    <!-- PROFILE -->
+
+    <section id="profile">
+
+      <div class="eyebrow">IDENTITY</div>
+      <h2>Your Profile</h2>
+
+      <div class="panel profile-box">
+
+        <div class="profile-avatar" id="profileAvatar">
+          R
+        </div>
+
+        <div>
+          <div class="profile-name" id="profileName">
+            Riwaj
+          </div>
+
+          <p class="sub">
+            Level <span id="profileLevel">7</span> •
+            <span id="profileXP">1,280</span> XP
+          </p>
+
+          <div style="margin-top:15px;display:flex;gap:10px;flex-wrap:wrap;">
+            <span class="tag">CALISTHENICS</span>
+            <span class="tag">BOXING</span>
+            <span class="tag">MOBILITY</span>
+            <span class="tag">DISCIPLINE</span>
+          </div>
+
+          <button
+            class="btn secondary"
+            style="margin-top:18px;"
+            onclick="changeName()"
+          >
+            Edit Username
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <footer>
+    FORGE — Train with discipline. Learn with purpose.
+  </footer>
+
+
+  <!-- COURSE MODAL -->
+
+  <div class="modal" id="courseModal">
+
+    <div class="modal-box">
+
+      <div class="modal-top">
+
+        <div>
+          <div class="eyebrow" id="modalCategory">
+            TRAINING
+          </div>
+
+          <h2 id="modalTitle">
+            Course
+          </h2>
+
+          <p class="sub" id="modalDescription">
+            Course description
+          </p>
+        </div>
+
+        <button class="close" onclick="closeModal()">
+          ×
+        </button>
+
+      </div>
+
+      <div id="lessonList"></div>
+
+    </div>
+
+  </div>
+
+
+  <script type="module" src="app.js"></script>
+
+</body>
+</html>
